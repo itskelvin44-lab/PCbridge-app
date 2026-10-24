@@ -1,0 +1,12 @@
+#!/bin/sh
+# The rule and the module setting are inside the package, so dpkg already removed them.
+set -e
+case "$1" in remove|purge)
+    udevadm control --reload-rules 2>/dev/null || true
+    command -v update-desktop-database >/dev/null && update-desktop-database -q /usr/share/applications || true
+    command -v gtk-update-icon-cache >/dev/null && gtk-update-icon-cache -q -t /usr/share/icons/hicolor || true
+    if getent group uinput >/dev/null; then
+        echo "pcbridge: the group 'uinput' was left in place (other software may use it)."
+    fi
+;; esac
+exit 0

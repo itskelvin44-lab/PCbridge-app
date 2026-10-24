@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+  <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+  <title>PC Bridge</title>
+  <link rel="stylesheet" href="css/status.css">
+  <link rel="stylesheet" href="css/keyboard.css">
+  <link rel="stylesheet" href="css/gamepad.css">
+</head>
+<body>
+<div id="statusView">
+  <h1>PC Bridge</h1>
+  <div><span id="status">Starting</span><span id="target"></span></div>
+
+  <div id="stats">
+    <div class="stat"><span>Signal</span><b id="sigStat">-</b></div>
+    <div class="stat"><span>Connected for</span><b id="uptimeStat">-</b></div>
+    <div class="stat"><span>Link</span><b id="linkStat">-</b></div>
+    <div class="stat"><span>Last ping</span><b id="rttStat">-</b></div>
+    <div class="stat wide"><span>Sent / received</span><b id="countStat">0 / 0</b></div>
+  </div>
+
+  <div id="auth">
+    <div id="authMsg">Enter the code shown on the laptop</div>
+    <div class="row">
+      <input id="codeInput" type="tel" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off">
+      <button id="codeBtn">Connect</button>
+    </div>
+  </div>
+
+  <div class="row"><button id="kbBtn" disabled>Open keyboard &amp; mouse</button><button id="gpBtn" disabled>Open gamepad</button></div>
+
+  <div class="row">
+    <button id="pingBtn" disabled>Send PING</button>
+    <button id="rescanBtn">Rescan</button>
+  </div>
+
+  <div class="head"><h2>Nearby devices</h2></div>
+  <div id="devices"></div>
+
+  <div class="head">
+    <h2>Log</h2>
+    <div class="btns">
+      <button class="small" id="copyBtn">Copy</button>
+      <button class="small" id="clearBtn">Clear</button>
+      <button class="small" id="toggleLogBtn">Hide</button>
+    </div>
+  </div>
+  <div id="log"></div>
+</div>
+
+<div id="kbView" class="off">
+
+<div id="kbApp">
+  <div id="side">
+    <button id="mouse" class="sbtn" aria-label="Mouse touchpad">
+      <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="6"/><path d="M12 2v8M6 10h12"/></svg>Mouse
+    </button>
+    <button id="fs" class="sbtn mini" aria-label="Fullscreen">⛶</button>
+    <button id="gear" class="sbtn mini" aria-label="Settings">⚙</button>
+    <button id="hide" class="sbtn mini" aria-label="Hide mouse column">‹</button>
+  </div>
+  <div id="main">
+    <div id="bar"><button id="kbBack" class="sbtn"><span id="kbDot"></span>Status</button><span id="ev">Not connected</span><span id="typed"></span></div>
+    <div id="kb"></div>
+    <div id="pad">
+      <div id="surf"><div id="hint">Drag to move · tap to click · two-finger tap to right-click · two-finger drag to scroll</div>
+          <div id="cur"><svg viewBox="0 0 20 20"><path d="M2 1l14 9-6 1.5L7 18z"/></svg></div></div>
+        <div id="btns"><button class="pb" id="rmb" style="flex:.9">Right</button><div id="strip">Middle<br>drag to scroll<br>tap to click</div><button class="pb" id="lmb" style="flex:1.3">Left</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="set"><div id="card">
+  <h2>Settings</h2>
+  <label class="set"><span>Vibration<small id="vnote">Vibrates on every key press</small></span><input type="checkbox" id="vib"></label>
+  <div class="set"><span>Vibration strength</span><select id="str"><option value="8">Light</option><option value="16">Medium</option><option value="30">Strong</option></select></div>
+  <label class="set"><span>Key sound</span><input type="checkbox" id="snd"></label>
+  <div class="set"><span>Mouse button<small>Hold keeps the pad open only while pressed</small></span><select id="hold"><option value="1">Hold</option><option value="0">Tap to toggle</option></select></div>
+  <div class="set"><span>Pointer speed</span><input type="range" id="sens" min="0.5" max="3" step="0.1"></div>
+  <div class="set"><span>Theme</span><select id="theme"><option value="auto">Match device</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+  <button id="done">Done</button>
+</div></div>
+
+<div id="rot"><svg viewBox="0 0 48 80"><rect x="6" y="2" width="36" height="76" rx="6"/><path d="M20 70h8"/></svg><div>Rotate your phone to landscape</div><button id="rotBack" class="sbtn">Back to status</button></div>
+
+</div>
+
+<div id="gpView" class="off">
+
+<div id="pad">
+  <div id="grille"></div>
+  <div class="zone" id="lz" style="left:35%;top:64%"><div class="base"><i></i></div></div>
+  <div class="zone" id="rz" style="left:65%;top:64%"><div class="base"><i></i></div></div>
+
+  <div class="c k tl" style="left:21%;top:14%" data-b="L1">L1</div>
+  <div class="c k tl" style="left:28%;top:29%" data-b="L2">L2</div>
+  <div class="c d dp" style="left:12%;top:33%" data-b="Up">▲</div>
+  <div class="c d dp" style="left:5.5%;top:50%" data-b="Left">◀</div>
+  <div class="c d dp" style="left:18.5%;top:50%" data-b="Right">▶</div>
+  <div class="c d dp" style="left:12%;top:67%" data-b="Down">▼</div>
+  <div class="c d l3" style="left:22%;top:80%" data-b="L3">L3</div>
+
+  <div class="c k tr" style="left:79%;top:14%" data-b="R1">R1</div>
+  <div class="c k tr" style="left:72%;top:29%" data-b="R2">R2</div>
+  <div class="c d fb" style="left:88%;top:33%" data-b="Y">Y</div>
+  <div class="c d fb" style="left:81.5%;top:50%" data-b="X">X</div>
+  <div class="c d fb" style="left:94.5%;top:50%" data-b="B">B</div>
+  <div class="c d fb" style="left:88%;top:67%" data-b="A">A</div>
+  <div class="c d l3" style="left:78%;top:80%" data-b="R3">R3</div>
+
+  <div class="c pill" style="left:44%;top:10%" data-b="Select">Select</div>
+  <div class="c home" style="left:50%;top:10%" data-b="Home">Home</div>
+  <div class="c pill" style="left:56%;top:10%" data-b="Start">Start</div>
+  <div id="ev">Ready</div>
+  <button class="c tool" style="left:46%;top:90%" id="fs" aria-label="Fullscreen">⛶</button>
+  <button class="c tool" style="left:54%;top:90%" id="gear" aria-label="Settings">⚙</button>
+  <button class="c tool" style="left:38%;top:90%" id="gpBack" aria-label="Back to status">←</button>
+</div>
+
+<div id="set"><div id="card">
+  <h2>Settings</h2>
+  <div class="set"><span>Button size<small>Keys, D-pad and face buttons</small></span><input type="range" id="size" min="0.8" max="1.5" step="0.05"></div>
+  <div class="set"><span>Stick size</span><input type="range" id="ssize" min="0.7" max="1.5" step="0.05"></div>
+  <div class="set"><span>Stick deadzone</span><input type="range" id="dz" min="0" max="0.4" step="0.01"></div>
+  <label class="set"><span>Vibration<small id="vnote">Vibrates on every press</small></span><input type="checkbox" id="vib"></label>
+  <div class="set"><span>Vibration strength</span><select id="str"><option value="8">Light</option><option value="16">Medium</option><option value="30">Strong</option></select></div>
+  <div class="set"><span>Theme</span><select id="theme"><option value="auto">Match device</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+  <button id="done">Done</button>
+</div></div>
+
+<div id="rot"><svg viewBox="0 0 48 80"><rect x="6" y="2" width="36" height="76" rx="6"/><path d="M20 70h8"/></svg><div>Rotate your phone to landscape</div><button id="gpRotBack" style="margin-top:8px;padding:12px 22px;border-radius:10px;background:var(--acc);color:var(--acct)">Back to status</button></div>
+
+</div>
+
+<script src="cordova.js"></script>
+<script src="js/app.js"></script>
+<script src="js/keyboard.js"></script>
+<script src="js/gamepad.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+#!/bin/sh
+# Runs as root after install. Never guesses which user to add: if it cannot tell, it says so.
+set -e
+[ "$1" = "configure" ] || exit 0
+
+modprobe uinput 2>/dev/null || echo "pcbridge: could not load the uinput module now (it loads at next boot)."
+getent group uinput >/dev/null || groupadd --system uinput
+
+user="${SUDO_USER:-}"
+if [ -z "$user" ] && [ -n "${PKEXEC_UID:-}" ]; then
+    user="$(getent passwd "$PKEXEC_UID" | cut -d: -f1)"
+fi
+if [ -n "$user" ] && [ "$user" != "root" ] && id "$user" >/dev/null 2>&1; then
+    usermod -aG uinput "$user"
+    echo "pcbridge: added '$user' to the group 'uinput'."
+else
+    echo "pcbridge: could not tell which user installed this, so nobody was added to the group 'uinput'."
+    echo "pcbridge: to do it by hand:  sudo usermod -aG uinput YOUR_USERNAME   (then log out and in)"
+fi
+
+udevadm control --reload-rules 2>/dev/null || true
+udevadm trigger --name-match=/dev/uinput 2>/dev/null || true
+command -v update-desktop-database >/dev/null && update-desktop-database -q /usr/share/applications || true
+command -v gtk-update-icon-cache >/dev/null && gtk-update-icon-cache -q -t /usr/share/icons/hicolor || true
+exit 0

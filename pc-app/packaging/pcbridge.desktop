@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=PC Bridge
+Comment=Use your phone as a keyboard, mouse and gamepad
+Exec=/usr/bin/pcbridge
+Icon=pcbridge
+Terminal=false
+Categories=Utility;
+StartupWMClass=Pcbridge

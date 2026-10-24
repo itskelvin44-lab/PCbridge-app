@@ -1,0 +1,12 @@
+Package: pcbridge
+Version: @VERSION@
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: bluez
+Installed-Size: @SIZE@
+Maintainer: PC Bridge <pcbridge@localhost>
+Description: Use your phone as a wireless keyboard, mouse and gamepad
+ Shows a 4-digit code; the phone app connects over Bluetooth Low Energy
+ and its input appears on this computer through a virtual keyboard,
+ mouse and gamepad (uinput).

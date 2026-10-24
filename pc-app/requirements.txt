@@ -1,0 +1,10 @@
+altgraph==0.17.5
+bleak==3.0.2
+bless==0.3.0
+dbus-fast==5.2.0
+dbus-next==0.2.3
+evdev==2.0.0
+packaging==26.3
+pyinstaller==6.22.3
+pyinstaller-hooks-contrib==2026.9
+setuptools==84.2.1

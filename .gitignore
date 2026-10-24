@@ -1,0 +1,9 @@
+.venv/
+build/
+dist/
+*.deb
+__pycache__/
+*.bak
+node_modules/
+platforms/
+notes/
